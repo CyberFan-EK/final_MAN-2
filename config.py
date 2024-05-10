@@ -4,7 +4,7 @@ from dotenv import load_dotenv, find_dotenv
 from aiogram import Bot, Dispatcher
 
 load_dotenv(find_dotenv())
-bot = Bot(os.getenv('TOKEN'))
+bot = Bot('os.getenv('TOKEN')')
 dp = Dispatcher(bot=bot)
 
 openai.api_key = os.getenv('OPENAI_API_KEY')

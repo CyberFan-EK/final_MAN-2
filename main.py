@@ -1,4 +1,5 @@
 import asyncio
+import requests
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, FSInputFile
 from aiogram.utils.keyboard import InlineKeyboardButton
@@ -135,9 +136,23 @@ async def eleven(message: types.Message):
 async def contacts(message: types.Message):
     await message.reply("Контакти:\nНазва закладу: Комунальний заклад 'Запорізька спеціалізована школа-інтернат ІІ-ІІІ ступенів 'Козацький ліцей'' Запорізької обласної ради\nСкорочена назва: Запорізька школа-інтернат 'Козацький ліцей'\nАдреса: 69065, Запоріжжя, Дніпровський район, вул. Щаслива, 2\nТелефон/факс: +38 (061) 224-79-67\nЕ-mail: zp.inter4@ukr.net")
 
-@dp.message(F.text.lower() == "інше питання")
+@dp.message(F.text.lower() == "Інше питання")
 async def another(message: types.Message):
     await message.reply("Якщо тут нема відповіді на ваше питання, то залиште його тут і ми надамо відповідь впродовж 24-х годин")
+    
+    # Send a request to the make.com webhook
+    url = "https://hook.eu2.make.com/p052ofqdhrowa9osovl5epfm2vnk3cda"
+    data = {
+        "message": message.text,
+        "chat_id": message.chat.id,
+        "user_id": message.from_user.id
+    }
+    response = requests.post(url, json=data)
+
+    if response.status_code == 200:
+        await message.reply("Питання було відправлено на обробку.")
+    else:
+        await message.reply("Під час відправлення питання сталася помилка.")
 
 @dp.message(F.text.lower() == "підготовка до нмт")
 async def choose_nmt(message: types.Message):
